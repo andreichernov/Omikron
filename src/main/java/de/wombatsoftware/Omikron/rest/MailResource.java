@@ -30,6 +30,43 @@ public class MailResource {
 
         return Response.noContent().build();
     }
+
+    @GET
+    @Path("/oldschool/")
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response sendMailOldschool(@QueryParam("from") String from, @QueryParam("to") String to, @QueryParam("subject") String subject, @QueryParam("body") String body) {
+        OldschoolMailer mailer = new OldschoolMailer();
+
+        mailer.from(from);
+        mailer.to(to);
+        mailer.subject(subject);
+        mailer.body(body);
+        mailer.send();
+
+        return Response.noContent().build();
+    }
+}
+
+class OldschoolMailer {
+    public void from(String from) {
+        System.out.println("from: " + from);
+    }
+
+    public void to(String to) {
+        System.out.println("to: " + to);
+    }
+
+    public void subject(String subject) {
+        System.out.println("subject: " + subject);
+    }
+
+    public void body(String body) {
+        System.out.println("body: " + body);
+    }
+
+    public void send() {
+        System.out.println("sending...");
+    }
 }
 
 class Mailer {
