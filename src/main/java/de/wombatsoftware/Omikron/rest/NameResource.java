@@ -21,17 +21,10 @@ public class NameResource {
 
     @GET
     @Produces(MediaType.APPLICATION_JSON)
-    public Response getNames(@QueryParam("startsWith") @DefaultValue("B") String startsWith, @QueryParam("length") @DefaultValue("3") int length) {
+    public Response getNames(@QueryParam("startsWith") @DefaultValue("B") List<String> letterList, @QueryParam("length") @DefaultValue("3") List<Integer> lengthList) {
         return Response.ok(names.stream()
-                /*
-                    .filter(name -> name.startsWith("B") || name.startsWith("K"))
-                    .filter(name -> name.length() == 3 || name.length() == 4)
-                */
-
-                // TODO: Allow multiple values for startsWith and length
-
-                .filter(name -> name.startsWith(startsWith))
-                .filter(name -> name.length() == length)
+                .filter(name -> letterList.stream().anyMatch(letter -> name.startsWith(letter)))
+                .filter(name -> lengthList.stream().anyMatch(length -> name.length() == length))
                 .collect(toList())).build();
     }
 }
