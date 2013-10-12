@@ -4,6 +4,7 @@ import javax.ejb.Stateless;
 import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
@@ -26,5 +27,27 @@ public class NameResource {
                 .filter(name -> letterList.stream().anyMatch(letter -> name.startsWith(letter)))
                 .filter(name -> lengthList.stream().anyMatch(length -> name.length() == length))
                 .collect(toList())).build();
+    }
+
+    @GET
+    @Path("/oldschool/")
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response getNamesOldschool(@QueryParam("startsWith") @DefaultValue("B") List<String> letterList, @QueryParam("length") @DefaultValue("3") List<Integer> lengthList) {
+        List<String> result = new ArrayList<>();
+
+        for(String name : names) {
+            for(String letter : letterList) {
+                if(name.startsWith(letter)) {
+                   for(int length : lengthList) {
+                       if(name.length() == length) {
+                           result.add(name);
+                       }
+                   }
+
+                }
+            }
+        }
+
+        return Response.ok(result).build();
     }
 }
