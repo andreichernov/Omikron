@@ -21,15 +21,17 @@ public class MailResource {
     @GET
     @Produces(MediaType.APPLICATION_JSON)
     public Response sendMail(@QueryParam("from") String from, @QueryParam("to") String to, @QueryParam("subject") String subject, @QueryParam("body") String body) {
-        Mailer.send(mailer -> {
+        String result = Mailer.send(mailer -> {
             mailer.from(from)
                     .to(to)
                     .subject(subject)
                     .body(body);
         });
 
-        return Response.noContent().build();
+        return Response.ok(result).build();
     }
+
+    // Below is the oldschool way of solving the problem
 
     @GET
     @Path("/oldschool/")
@@ -43,60 +45,81 @@ public class MailResource {
         mailer.body(body);
         mailer.send();
 
-        return Response.noContent().build();
-    }
-}
-
-class OldschoolMailer {
-    public void from(String from) {
-        System.out.println("from: " + from);
-    }
-
-    public void to(String to) {
-        System.out.println("to: " + to);
-    }
-
-    public void subject(String subject) {
-        System.out.println("subject: " + subject);
-    }
-
-    public void body(String body) {
-        System.out.println("body: " + body);
-    }
-
-    public void send() {
-        System.out.println("sending...");
+        return Response.ok(mailer.getResult()).build();
     }
 }
 
 class Mailer {
-    public static void send(Consumer<Mailer> block) {
+    private StringBuffer result;
+
+    public Mailer() {
+        result = new StringBuffer();
+    }
+
+    public static String send(Consumer<Mailer> block) {
         Mailer mailer = new Mailer();
         block.accept(mailer);
-        System.out.println("sending...");
+
+        return mailer.getResult().append(" # sending...").toString();
     }
 
     public Mailer from(String from) {
-        System.out.println("from: " + from);
+        result.append("from: " + from);
 
         return this;
     }
 
     public Mailer to(String to) {
-        System.out.println("to: " + to);
+        result.append(" # to: " + to);
 
         return this;
     }
 
     public Mailer subject(String subject) {
-        System.out.println("subject: " + subject);
+        result.append(" # subject: " + subject);
 
         return this;
     }
 
     public Mailer body(String body) {
-        System.out.println("body: " + body);
+        result.append(" # body: " + body);
 
         return this;
+    }
+
+    public StringBuffer getResult() {
+        return result;
+    }
+}
+
+class OldschoolMailer {
+    private StringBuffer result;
+
+    public OldschoolMailer() {
+        result = new StringBuffer();
+    }
+
+    public void from(String from) {
+        result.append("from: " + from);
+    }
+
+    public void to(String to) {
+        result.append(" # to: " + to);
+    }
+
+    public void subject(String subject) {
+        result.append(" # subject: " + subject);
+    }
+
+    public void body(String body) {
+        result.append(" # body: " + body);
+    }
+
+    public void send() {
+        result.append(" # sending...");
+    }
+
+    public String getResult() {
+        return result.toString();
     }
 }

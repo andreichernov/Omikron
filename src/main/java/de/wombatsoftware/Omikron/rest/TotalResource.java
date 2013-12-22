@@ -21,11 +21,46 @@ import java.util.function.Predicate;
 public class TotalResource {
     List<Integer> values = Arrays.asList(1, 2, 3, 4, 5, 6);
 
+    @GET
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response getTotal(@QueryParam("odd") Boolean odd) {
+        int response = 0;
+
+        if (odd == null) {
+            response = totalValues(values, value -> true);
+        } else if (odd) {
+            response = totalValues(values, value -> value % 2 != 0);
+        } else {
+            response = totalValues(values, value -> value % 2 == 0);
+        }
+
+        return Response.ok(response).build();
+    }
+
     public static int totalValues(List<Integer> numbers, Predicate<Integer> selector) {
         return numbers.stream()
                 .filter(selector)
                 .mapToInt(value -> value)
                 .sum();
+    }
+
+    // Below is the oldschool way of solving the problem
+
+    @GET
+    @Path("/oldschool/")
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response getTotalOldschool(@QueryParam("odd") Boolean odd) {
+        int response = 0;
+
+        if (odd == null) {
+            response = totalValues(values);
+        } else if (odd == true) {
+            response = totalOddValues(values);
+        } else {
+            response = totalEvenValues(values);
+        }
+
+        return Response.ok(response).build();
     }
 
     // BAD STYLE
@@ -59,38 +94,5 @@ public class TotalResource {
         }
 
         return total;
-    }
-
-    @GET
-    @Produces(MediaType.APPLICATION_JSON)
-    public Response getTotal(@QueryParam("odd") Boolean odd) {
-        int response = 0;
-
-        if (odd == null) {
-            response = totalValues(values, value -> true);
-        } else if (odd == true) {
-            response = totalValues(values, value -> value % 2 != 0);
-        } else {
-            response = totalValues(values, value -> value % 2 == 0);
-        }
-
-        return Response.ok(response).build();
-    }
-
-    @GET
-    @Path("/oldschool/")
-    @Produces(MediaType.APPLICATION_JSON)
-    public Response getTotalOldschool(@QueryParam("odd") Boolean odd) {
-        int response = 0;
-
-        if (odd == null) {
-            response = totalValues(values);
-        } else if (odd == true) {
-            response = totalOddValues(values);
-        } else {
-            response = totalEvenValues(values);
-        }
-
-        return Response.ok(response).build();
     }
 }

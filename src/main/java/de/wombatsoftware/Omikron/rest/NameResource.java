@@ -29,6 +29,8 @@ public class NameResource {
                 .collect(toList())).build();
     }
 
+    // Below is the oldschool way of solving the problem
+
     @GET
     @Path("/oldschool/")
     @Produces(MediaType.APPLICATION_JSON)
