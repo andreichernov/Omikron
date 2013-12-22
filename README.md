@@ -1,7 +1,7 @@
 Omikron
 =======
 
-A demo repository to showcase the combination Java 8 and Java EE 7
+A demo repository to showcase the combination of Java 8 and Java EE 7
 
 # About
 Project Omikron is a collection of samples featuring Java 8 and Java EE 7. So far we collected Java 8 Lamba samples and migrated them to be used from Java EE 7.
