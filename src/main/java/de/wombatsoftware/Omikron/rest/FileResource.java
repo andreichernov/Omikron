@@ -16,7 +16,7 @@ import static java.util.stream.Collectors.*;
 
 /**
  * @author Peter Bence Marfoldi
- * @date 10.10.13 15:15
+ * @date 20.07.15 16:46
  */
 
 @Path("/files/")
