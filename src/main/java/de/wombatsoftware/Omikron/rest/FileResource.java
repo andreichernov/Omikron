@@ -16,13 +16,12 @@ import static java.util.stream.Collectors.*;
 
 /**
  * @author Peter Bence Marfoldi
- * @date 10.10.13 15:15
+ * @date 20.07.15 17:17
  */
 
 @Path("/files/")
 @Stateless
 public class FileResource {
-
 	@GET
 	@Produces(MediaType.APPLICATION_JSON)
 	public Response getFiles(@QueryParam("path") @DefaultValue(".") String path) throws IOException {
